@@ -89,6 +89,9 @@ DATABASES = {
         'PORT': 5432
     }
 }
+# Agregamos los HOST permitidos en settings.py, lo que permitirá dar permiso a nginx cuando tenga una consulta externa o mejor dicha en el navegador
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'web']
+
 # Luego ejecutar el comando para actualizar los cambios agregados:
   docker compose up
 
