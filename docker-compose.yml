@@ -1,0 +1,52 @@
+
+services:
+  nginx:
+    build: ./nginx
+    image: nginx
+    container_name: "nginx_cont"
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+  db:
+    image: postgres:15.10
+    restart: always 
+    container_name: postgresql
+            
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment: 
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_DB=my_database
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+        
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=jamer.omar.asencio.urcia@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "5050:5050"
+    depends_on:
+      - db
+  
+
+        
+  web:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=my_database
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    depends_on:
+      - db
