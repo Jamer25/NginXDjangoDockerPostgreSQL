@@ -116,7 +116,7 @@ El Dockerfile en la carpeta nginx se utiliza para construir una imagen personali
 
 # En default.conf:
 
-upstream django_docker{
+upstream django_backend{
     server web:8000;
 
 }
@@ -126,7 +126,9 @@ server{
     server_name localhost;
 
     location /{
-        proxy_pass http://web:8000;
+        proxy_pass http://django_backend;
+        proxy_set_header Host $host;
+
     }
 }
 
